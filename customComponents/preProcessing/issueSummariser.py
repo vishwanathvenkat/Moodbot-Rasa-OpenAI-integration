@@ -51,16 +51,19 @@ class IssueSummariser(GraphComponent):
 
 
                                         The response should be in this format
-                                        1. Emotion: {emotion state}
-                                        2. Behaviour: {behavior}
-                                        3. Cause: {Self, family, friends}
+                                        emotion: {emotion state}
+                                        behaviour: {behavior} 
+                                        cause: {Self, family, colleagues}
 
-                                        If any of the fields are missing, then give none. Dont hallucinate
+                                        All of the three values should be single word. Not sentences
+                                        If any of the fields are missing, then give "None".
+                                         Do not assume anything if its not explicitly mentioned.
         """
         summariser_client = OpenAI()
         for idx, message in enumerate(messages):
-            if message.get('intent')['name'] != "greet"  and '/' not in message.get('text'):
-                text = messages[-1].data["text"]
+
+            if message.get('intent')['name'] != "greet" and '/' not in message.get('text'):
+                text = message.get("text")
                 response = summariser_client.chat.completions.create(
                     model='gpt-3.5-turbo-1106',
                     messages=[

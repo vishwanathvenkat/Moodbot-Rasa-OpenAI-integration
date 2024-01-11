@@ -17,7 +17,7 @@ nlu:
     - goodevening
     - good afternoon
 
-- intent: explain_issue_fallback_to_LLM
+- intent: explain_issue
   examples: |
     - I want to order food
     - What is 2 + 2?

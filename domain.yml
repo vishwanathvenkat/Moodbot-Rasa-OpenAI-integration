@@ -2,12 +2,33 @@ version: "3.1"
 
 intents:
   - greet
-  - explain_issue_fallback_to_LLM
+  - explain_issue
 #  - affirm
 #  - deny
 #  - mood_great
 #  - mood_unhappy
 #  - bot_challenge
+#forms:
+#  mood_form:
+#    required_slots:
+#      - emotion
+#      - behaviour
+#      - cause
+#
+
+slots:
+  emotion:
+    type: text
+    mappings:
+      - type: custom
+  behaviour:
+    type: text
+    mappings:
+      - type: custom
+  cause:
+    type: text
+    mappings:
+      - type: custom
 
 #responses:
 #  utter_greet:
@@ -33,13 +54,13 @@ actions:
   - action_enquire
   - action_llm_empathise
 
-slots:
-  Emotion:
-    type: text
-  Behaviour:
-    type: text
-  Cause:
-    type: text
-session_config:
-  session_expiration_time: 60
-  carry_over_slots_to_new_session: true
+#slots:
+#  Emotion:
+#    type: text
+#  Behaviour:
+#    type: text
+#  Cause:
+#    type: text
+#session_config:
+#  session_expiration_time: 60
+#  carry_over_slots_to_new_session: true

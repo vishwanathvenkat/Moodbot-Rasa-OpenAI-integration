@@ -64,7 +64,6 @@ class ActionEmpathise(Action):
         message = tracker.latest_message
         text = message['metadata']
 
-        dict = self.get_slots(text)
 
         response = self.nlg_client.chat.completions.create(
             model='gpt-3.5-turbo-1106',
@@ -72,7 +71,8 @@ class ActionEmpathise(Action):
                 {"role": "system", "content": "You are a mental wellness bot. "
                                               "You take a string of dictionary with three key values. "
                                               "YOu say something cheerful or consolation based on the "
-                                              "values that are filled. "},
+                                              "values that are filled. You can summarize the details but dont assume assume anything "
+                                              "You should prompt the user to fill in the rest of the details "},
                 {"role": "user", "content": text},
             ],
             temperature=0.5,
@@ -80,7 +80,7 @@ class ActionEmpathise(Action):
         )
         message = response.choices[0].message.content
         dispatcher.utter_message(text=message)
-
+        dict = self.get_slots(text)
         return [SlotSet(key, value) for key, value in dict.items() if value != "None"]
 
     def get_slots(self, input):
