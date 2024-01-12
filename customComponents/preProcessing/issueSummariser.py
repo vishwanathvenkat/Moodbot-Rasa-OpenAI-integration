@@ -77,6 +77,5 @@ class IssueSummariser(GraphComponent):
                     temperature=0.0
                 )
                 metadata = response.choices[0].message.content
-                # assert len(metadata) == 3, "The IssueSummarizer did not return 3 keys"
                 message.set("metadata", metadata, add_to_output=True)
         return messages

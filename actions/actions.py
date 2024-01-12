@@ -70,8 +70,11 @@ class ActionEmpathise(Action):
         text = message['metadata']
 
         if "is_understanding_correct" in text:
-            is_understanding_correct = bool(text.split(":")[-1])
+            toBool = {'True': True, 'False': False}
+            is_understanding_correct = toBool[text.split(": ")[-1]]
+            llm_input_text = self.get_text_from_slots(tracker)
         else:
+            llm_input_text = text
             is_understanding_correct = False
 
         if is_understanding_correct is False:
@@ -81,17 +84,17 @@ class ActionEmpathise(Action):
                 messages=[
                     {"role": "system", "content": "You are a mental wellness bot. "
                                                   "You take a string of dictionary with key values. "
-                                                  "YOu say something cheerful or consolation based on the "
-                                                  "values that are filled. You can summarize the details but dont assume assume anything "
+
+                                                  "You can summarize the details but dont assume assume anything "
                                                   "You should check if the string of dictionary has all the values not equal to None."
                                                   " If not, You should prompt the user to fill in the rest of the details by specifically"
                                                   "If all the values are not equal to none. You just ask the user if your understanding is correct"
                                                   "asking them to answer the question. If the user strays off topic and enters random answers, "
                                                   "gently remind them you are just a mental wellness bot and ask them to stick to the topic"},
-                    {"role": "user", "content": text},
+                    {"role": "user", "content": llm_input_text},
                 ],
-                temperature=0.5,
-                top_p=0.5
+                temperature=0.2,
+                top_p=0.2
             )
             message = response.choices[0].message.content
             dispatcher.utter_message(text=message)
@@ -101,21 +104,30 @@ class ActionEmpathise(Action):
                 messages=[
                     {"role": "system", "content": "You are a mental wellness bot. "
                                                   "You take a string of dictionary with key values. "
-                                                  "You reassure the user everything will be allright and you give a quote from internet to motivate the user"
-                                                  " You also recommend some psychology practice or yoga video for the user to relax"
+                                                  "YOu say something cheerful or consolation based on the "
+                                                  "values that are filled."
+                                                  "You give a quote from internet to relevant to the emotion, behaviour and cause of the user"
+                                                  " You also recommend some psychology practice for the user appropriate to the current situation"
                                                   },
-                    {"role": "user", "content": text},
+                    {"role": "user", "content": llm_input_text},
                 ],
-                temperature=0.5,
-                top_p=0.5
+                temperature=0.2,
+                top_p=0.2
             )
             message = response.choices[0].message.content
             dispatcher.utter_message(text=message)
 
-        dict = self.get_slots(text)
+        dict = self.get_values(text)
         return [SlotSet(key, value) for key, value in dict.items() if value != "None"]
 
-    def get_slots(self, input):
+    def get_text_from_slots(self, tracker: Tracker):
+        dict = {}
+        for slot in ["emotion", "behaviour", "cause"]:
+            dict[slot] = tracker.get_slot(slot)
+
+        return str(dict)
+
+    def get_values(self, input):
         lines = input.split('\n')
 
         # Initialize an empty dictionary
