@@ -8,13 +8,13 @@ intents:
 #  - mood_great
 #  - mood_unhappy
 #  - bot_challenge
-#forms:
-#  mood_form:
-#    required_slots:
-#      - emotion
-#      - behaviour
-#      - cause
-#
+forms:
+  mood_form:
+    required_slots:
+      - emotion
+      - behaviour
+      - cause
+
 
 slots:
   emotion:
@@ -29,6 +29,12 @@ slots:
     type: text
     mappings:
       - type: custom
+
+#  is_understanding_correct:
+#    type: bool
+#    initial_value: false
+#    mappings:
+#      - type: custom
 
 #responses:
 #  utter_greet:

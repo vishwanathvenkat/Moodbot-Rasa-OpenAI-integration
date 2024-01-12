@@ -7,6 +7,7 @@ from rasa.engine.storage.storage import ModelStorage
 from rasa.shared.nlu.training_data.message import Message
 from rasa.shared.nlu.training_data.training_data import TrainingData
 from openai import OpenAI
+import httpx
 
 
 # TODO: Correctly register your component with its type
@@ -58,8 +59,11 @@ class IssueSummariser(GraphComponent):
                                         All of the three values should be single word. Not sentences
                                         If any of the fields are missing, then give "None".
                                          Do not assume anything if its not explicitly mentioned.
+                                         
+                                        Additionally, instead of the above text, the user might also affirm or deny a statement. In that case response should be
+                                        is_understanding_correct: True or False. default is False.
         """
-        summariser_client = OpenAI()
+        summariser_client = OpenAI(timeout=httpx.Timeout(15.0, read=5.0, write=10.0, connect=3.0))
         for idx, message in enumerate(messages):
 
             if message.get('intent')['name'] != "greet" and '/' not in message.get('text'):
