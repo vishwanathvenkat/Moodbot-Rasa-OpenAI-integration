@@ -6,6 +6,8 @@ from rasa.engine.storage.resource import Resource
 from rasa.engine.storage.storage import ModelStorage
 from rasa.shared.nlu.training_data.message import Message
 from rasa.shared.nlu.training_data.training_data import TrainingData
+from rasa.nlu.classifiers.classifier import IntentClassifier
+import abc
 from openai import OpenAI
 import httpx
 
@@ -16,8 +18,6 @@ import httpx
 )
 class IssueSummariser(GraphComponent):
 
-
-
     @classmethod
     def create(
         cls,
@@ -26,8 +26,32 @@ class IssueSummariser(GraphComponent):
         resource: Resource,
         execution_context: ExecutionContext,
     ) -> GraphComponent:
-        # TODO: Implement this
-        ...
+        # TODO: Replace this with config file
+        cls.llm_instruction = """
+
+                                                        You are a helpful emotional assistance bot. You read the user's chat and figure out the following.
+                                                       1. The emotional state of the user through out the day
+                                                       2. The cause of the emotional state. Should be one of self, family or colleagues
+                                                       3. How did the person behave when he went through the emotion.
+
+
+                                                        The response should be in this format
+                                                        emotion: {emotion state}
+                                                        behaviour: {behavior} 
+                                                        cause: {Self, family, colleagues}
+
+                                                        All of the three values should be single word. Not sentences
+                                                        If any of the fields are missing, then give "None".
+                                                         Do not assume anything if its not explicitly mentioned.
+
+                                                        Additionally, instead of the above text, the user might also affirm or deny a statement. In that case response should be
+                                                        is_understanding_correct: True or False. default is False.
+                        """
+        cls.summariser_client = OpenAI(timeout=httpx.Timeout(15.0, read=5.0, write=10.0, connect=3.0))
+        cls.model = 'gpt-3.5-turbo-1106'
+        cls.temperature = 0.0
+        return cls()
+
 
     def train(self, training_data: TrainingData) -> Resource:
         # TODO: Implement this if your component requires training
@@ -43,38 +67,17 @@ class IssueSummariser(GraphComponent):
 
     def process(self, messages: List[Message]) -> List[Message]:
         # TODO: This is the method which Rasa Open Source will call during inference.
-        llm_instruction = """
-
-                                        You are a helpful emotional assistance bot. You read the user's chat and figure out the following.
-                                       1. The emotional state of the user through out the day
-                                       2. The cause of the emotional state. Should be one of self, family or colleagues
-                                       3. How did the person behave when he went through the emotion.
-
-
-                                        The response should be in this format
-                                        emotion: {emotion state}
-                                        behaviour: {behavior} 
-                                        cause: {Self, family, colleagues}
-
-                                        All of the three values should be single word. Not sentences
-                                        If any of the fields are missing, then give "None".
-                                         Do not assume anything if its not explicitly mentioned.
-                                         
-                                        Additionally, instead of the above text, the user might also affirm or deny a statement. In that case response should be
-                                        is_understanding_correct: True or False. default is False.
-        """
-        summariser_client = OpenAI(timeout=httpx.Timeout(15.0, read=5.0, write=10.0, connect=3.0))
         for idx, message in enumerate(messages):
-
+            # We can avoid LLM calls for greet and any direct intent which starts with '/' like '/restart'
             if message.get('intent')['name'] != "greet" and '/' not in message.get('text'):
                 text = message.get("text")
-                response = summariser_client.chat.completions.create(
-                    model='gpt-3.5-turbo-1106',
+                response = self.summariser_client.chat.completions.create(
+                    model=self.model,
                     messages=[
-                        {"role": "system", "content": llm_instruction},
+                        {"role": "system", "content": self.llm_instruction},
                         {"role": "user", "content": text},
                     ],
-                    temperature=0.0
+                    temperature=self.temperature
                 )
                 metadata = response.choices[0].message.content
                 message.set("metadata", metadata, add_to_output=True)

@@ -55,8 +55,5 @@ story_graph.dot
 .vscode
 
 credentials.yml
-credentials-dev.yml
 endpoints.yml
-endpoints.dev.yml
-enpoints.dev.txt
 .env
