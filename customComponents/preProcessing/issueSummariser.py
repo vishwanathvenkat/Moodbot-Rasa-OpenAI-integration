@@ -5,9 +5,6 @@ from rasa.engine.recipes.default_recipe import DefaultV1Recipe
 from rasa.engine.storage.resource import Resource
 from rasa.engine.storage.storage import ModelStorage
 from rasa.shared.nlu.training_data.message import Message
-from rasa.shared.nlu.training_data.training_data import TrainingData
-from rasa.nlu.classifiers.classifier import IntentClassifier
-import abc
 from openai import OpenAI
 import httpx
 
@@ -51,19 +48,6 @@ class IssueSummariser(GraphComponent):
         cls.model = 'gpt-3.5-turbo-1106'
         cls.temperature = 0.0
         return cls()
-
-
-    def train(self, training_data: TrainingData) -> Resource:
-        # TODO: Implement this if your component requires training
-        ...
-
-    def process_training_data(self, training_data: TrainingData) -> TrainingData:
-        # TODO: Implement this if your component augments the training data with
-        #       tokens or message features which are used by other components
-        #       during training.
-        ...
-
-        return training_data
 
     def process(self, messages: List[Message]) -> List[Message]:
         # TODO: This is the method which Rasa Open Source will call during inference.
