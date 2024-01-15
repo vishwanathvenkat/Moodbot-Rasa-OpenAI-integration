@@ -15,12 +15,12 @@ The decision to use a `moodbot` for this example is driven by the fact that when
 
 
 # Flow
-![](/media/wizav/DATA/personal-upskill/rasa-openai/moodbot/moodbot-flow.png)
+![](https://github.com/vishwanathvenkat/moodbot/blob/master/moodbot-flow.png)
 
 
 # How to setup
 1. Create a virtual environment and install requirements
-2. Obtain OpenAI API credentials and add to ~/.bashrc as `OPENAI_API_KEY`=''
+2. Obtain OpenAI API credentials and add to ~/.bashrc as `OPENAI_API_KEY`="" ""
 3. Repository Installation
 ```git clone https://github.com/your-username/rasa-openai-integration.git```
 
