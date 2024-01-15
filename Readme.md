@@ -15,7 +15,7 @@ The decision to use a `moodbot` for this example is driven by the fact that when
 
 
 # Flow
-![](/home/wizav/Downloads/moodbot-flow.png)
+![](/media/wizav/DATA/personal-upskill/rasa-openai/moodbot/moodbot-flow.png)
 
 
 # How to Setup
