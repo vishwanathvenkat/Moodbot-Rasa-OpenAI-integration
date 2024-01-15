@@ -18,43 +18,18 @@ The decision to use a `moodbot` for this example is driven by the fact that when
 ![](/media/wizav/DATA/personal-upskill/rasa-openai/moodbot/moodbot-flow.png)
 
 
-# How to Setup
-To set up and use this integration, follow these steps:
-
-# Prerequisites:
-Ensure you have a working RASA installation.
-Obtain OpenAI API credentials and replace the placeholder in the configuration file.
-Installation:
-Clone the repository:
-
-bash
-Copy code
-git clone https://github.com/your-username/rasa-openai-integration.git
-cd rasa-openai-integration
-Install dependencies:
-
-bash
-Copy code
-pip install -r requirements.txt
-Configure OpenAI API credentials:
-
-Replace the placeholder in config.yml with your OpenAI API key.
-
-Run RASA:
-
-bash
-Copy code
-rasa train
-rasa shell
-Now, your RASA instance is set up with the OpenAI integration, ready to process user inputs.
+# How to setup
+1. Create a virtual environment and install requirements
+2. Obtain OpenAI API credentials and add to ~/.bashrc as `OPENAI_API_KEY`=''
+3. Repository Installation
+```git clone https://github.com/your-username/rasa-openai-integration.git```
 
 #  Output
 Once the integration is set up, users can input paragraphs, and the system will leverage OpenAI's language models to extract relevant details. The extracted details can be used for further interaction within the RASA framework.
 
-Example:
+## Demo
 
-User Input: "I recently visited Paris, and the Eiffel Tower was amazing!"
-Extracted Details: {"Location": "Paris", "Attraction": "Eiffel Tower"}
+
 5. Future Enhancements
 The current focus of this integration is on the seamless interaction between RASA and OpenAI. Future enhancements may include:
 

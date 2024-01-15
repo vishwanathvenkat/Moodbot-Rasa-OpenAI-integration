@@ -1,29 +1,139 @@
-<html>
-  <head>
-    <meta charset="UTF-8" />
-    <title>Rasa Chatbot</title>
-  </head>
-  <body>
-    <div id="webchat" >
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            font-family: 'Arial', sans-serif;
+        }
 
-<script>!(function () {
-    let e = document.createElement("script"),
-      t = document.head || document.getElementsByTagName("head")[0];
-    (e.src =
-      "https://cdn.jsdelivr.net/npm/rasa-webchat@1.0.1/lib/index.js"),
-      (e.async = !0),
-      (e.onload = () => {
-        window.WebChat.default(
-          {
-            customData: { language: "en" },
-           // URL CAN BE CHANGED HERE FOR CHATBOT
-            socketUrl: "http://localhost:5005",
-          },
-          null
-        );
-      }),
-      t.insertBefore(e, t.firstChild);
-  })();
-  </script>
-    </body>
+        #chat-container {
+            max-width: 600px; /* Increased max-width */
+            width: 100%;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        #chat-header {
+            background-color: #4caf50;
+            color: white;
+            text-align: center;
+            padding: 15px;
+            font-size: 1.5em;
+            border-radius: 10px 10px 0 0;
+        }
+
+        #chat-display {
+            padding: 15px;
+            height: 300px; /* Increased height */
+            overflow-y: scroll;
+            background-color: #f4f4f4;
+        }
+
+        .user-message {
+            background-color: #4caf50;
+            color: white;
+            text-align: right;
+            padding: 10px;
+            border-radius: 10px;
+            margin: 5px 0;
+        }
+
+        .rasa-message {
+            background-color: #2196f3;
+            color: white;
+            text-align: left;
+            padding: 10px;
+            border-radius: 10px;
+            margin: 5px 0;
+        }
+
+        #user-input {
+            width: 75%;
+            padding: 10px;
+            box-sizing: border-box;
+            border: none;
+            border-bottom: 1px solid #ccc;
+            outline: none;
+        }
+
+        #send-button {
+            width: 20%;
+            padding: 10px;
+            box-sizing: border-box;
+            border: none;
+            background-color: #4caf50;
+            color: white;
+            cursor: pointer;
+            border-radius: 0 10px 10px 0;
+        }
+
+        #send-button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="chat-container">
+        <div id="chat-header">Chat with MoodBot</div>
+        <div id="chat-display"></div>
+        <div style="display: flex;">
+            <input type="text" id="user-input" placeholder="Type your message..." onkeypress="handleKeyPress(event)">
+            <button id="send-button" onclick="sendMessage()">Send</button>
+        </div>
+    </div>
+
+    <script>
+        function sendMessage() {
+            var userInput = document.getElementById("user-input").value;
+            displayMessage("user", userInput);
+
+            // Make a request to Rasa backend (replace 'http://your-rasa-server' with your Rasa server URL)
+            fetch('http://localhost:5005/webhooks/rest/webhook', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    message: userInput
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Display Rasa's response
+                displayMessage("rasa", data[0].text);
+            })
+            .catch(error => {
+                console.error('Error sending message to Rasa:', error);
+            });
+
+            // Clear the input box after sending the message
+            document.getElementById("user-input").value = "";
+        }
+
+        function displayMessage(sender, message) {
+            var chatDisplay = document.getElementById("chat-display");
+            var messageClass = sender === "user" ? "user-message" : "rasa-message";
+            chatDisplay.innerHTML += "<div class='" + messageClass + "'>" + message + "</div>";
+
+            // Scroll to the bottom of the chat display
+            chatDisplay.scrollTop = chatDisplay.scrollHeight;
+        }
+
+        function handleKeyPress(event) {
+            if (event.key === 'Enter') {
+                sendMessage();
+            }
+        }
+    </script>
+
+</body>
 </html>
