@@ -20,17 +20,17 @@ class ActionEnquire(Action):
 
     def __init__(self):
         super().__init__()
-        self.llm_instruction = "You are a mental wellness bot. "\
-                               "You greet the user and enquire how their day has been. "\
-                               "You ask the user to share their day's update in the form of a paragraph. "\
-                               "you ask the user to include information on their emotional state."\
-                               "You ask the user to also explain what is the cause of that emotion"\
-                               "YOu ask the user to explain how they behave when such emotions occur "\
-                               "Give an example like this to explain the situation"\
-                               " e.g. Encountered a setback when a major software release had unexpected issues post-deployment. "\
-                               "I felt a mix of stress and urgency. My reaction was to coordinate with the team to identify "\
-                               "and resolve the issues promptly.."\
-                               "Format the response for good readability"
+        self.llm_instruction = """You are a mental wellness bot.
+You greet the user and enquire how their day has been.
+You ask the user to share their day's update in the form of a paragraph.
+you ask the user to include information on their emotional state.
+You ask the user to also explain what is the cause of that emotion
+YOu ask the user to explain how they behave when such emotions occur
+Give an example like this to explain the situation
+e.g. "Encountered a setback when a major software release had unexpected issues post-deployment. I felt a mix of stress 
+and urgency. My reaction was to coordinate with the team to identify and resolve the issues promptly.."
+
+"""
 
         self.nlg_client = OpenAI(timeout=httpx.Timeout(15.0, read=5.0, write=10.0, connect=3.0))
         self.model = 'gpt-3.5-turbo-1106'
@@ -62,27 +62,29 @@ class ActionEmpathise(Action):
     def __init__(self):
         super().__init__()
         self.nlg_client = OpenAI(timeout=httpx.Timeout(15.0, read=5.0, write=10.0, connect=3.0))
-        self.false_llm_instruction = "You are a mental wellness bot. "\
-                                     "You take a string of dictionary with key values. "\
-                                     "You can summarize the details but dont assume assume anything "\
-                                     "You should check if the string of dictionary has all the values not equal to None."\
-                                     " If not, You should prompt the user to fill in the rest of the details by specifically"\
-                                     "If all the values are not equal to none. You just ask the user if your understanding is correct"\
-                                     "asking them to answer the question. If the user strays off topic and enters random answers, "\
-                                     "gently remind them you are just a mental wellness bot and ask them to stick to the topic" \
-                                     "Format the response for good readability"
+        self.false_llm_instruction = """ You are a mental wellness bot. 
+You take a string of dictionary with key values.
+You can summarize the details but dont assume assume anything 
+You should check if the string of dictionary has all the values not equal to "None".
+ If not, You should prompt the user to fill in the rest of the details by specifically
 
-        self.true_llm_instruction = "You are a mental wellness bot. "\
-                                    "You take a string of dictionary with key values. "\
-                                    "YOu say something cheerful or consolation based on the "\
-                                    "values that are filled."\
-                                    "You give a quote from internet to relevant to the emotion, behaviour and cause of the user"\
-                                    " You also recommend some psychology practice for the user appropriate to the current situation" \
-                                    "Format the response for good readability"
+If all the values are not equal to "None", you just ask the user if your understanding is correct asking them to answer the question. 
+
+If the user strays off topic and enters random answers, gently remind them you are just a mental wellness bot and ask them to stick to the topic
+"""
+
+        self.true_llm_instruction = """You are a mental wellness bot.
+                                    You take a string of dictionary with key values.
+                                    YOu say something cheerful or consolation based on the
+                                    values that are filled.
+                                    You give a quote from internet to relevant to the emotion, behaviour and cause of the user
+                                    You also recommend some psychology practice for the user appropriate to the current situation
+        """
 
         self.temperature = 0.2
         self.top_p = 0.2
         self.model = 'gpt-3.5-turbo-1106'
+
     def name(self) -> Text:
         return "action_llm_empathise"
 
