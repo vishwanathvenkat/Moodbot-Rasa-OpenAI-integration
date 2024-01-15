@@ -26,9 +26,12 @@ The decision to use a `moodbot` for this example is driven by the fact that when
 
 
 ## Demo
-[Happy Path](https://www.youtube.com/watch?v=tSHLao7PYhE&ab_channel=VishwanathVenkat)
-[Rogue Path](https://www.youtube.com/watch?v=8gt8v19O9xY&ab_channel=VishwanathVenkat)
-[Data missing path](https://www.youtube.com/watch?v=9KFdWlyAk4U&ab_channel=VishwanathVenkat)
+### Happy path
+[![](https://github.com/vishwanathvenkat/moodbot/blob/master/Thumbnail.png)](https://www.youtube.com/watch?v=tSHLao7PYhE&ab_channel=VishwanathVenkat)
+### Rogue Path
+[![](https://github.com/vishwanathvenkat/moodbot/blob/master/Thumbnail.png)](https://www.youtube.com/watch?v=8gt8v19O9xY&ab_channel=VishwanathVenkat)
+### Data missing Path
+[![](https://github.com/vishwanathvenkat/moodbot/blob/master/Thumbnail.png)](https://www.youtube.com/watch?v=9KFdWlyAk4U&ab_channel=VishwanathVenkat)
 
 ## Future Enhancements
 
