@@ -7,6 +7,12 @@ from rasa.engine.storage.storage import ModelStorage
 from rasa.shared.nlu.training_data.message import Message
 from openai import OpenAI
 import httpx
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
+api_key = os.environ.get('OPENAI_API_KEY')
+
 
 
 # TODO: Correctly register your component with its type
@@ -44,7 +50,7 @@ class IssueSummariser(GraphComponent):
                                                         Additionally, instead of the above text, the user might also affirm or deny a statement. In that case response should be
                                                         is_understanding_correct: True or False. default is False.
                         """
-        cls.summariser_client = OpenAI(timeout=httpx.Timeout(15.0, read=5.0, write=10.0, connect=3.0))
+        cls.summariser_client = OpenAI(api_key=api_key, timeout=httpx.Timeout(15.0, read=5.0, write=10.0, connect=3.0))
         cls.model = 'gpt-3.5-turbo-1106'
         cls.temperature = 0.0
         return cls()
