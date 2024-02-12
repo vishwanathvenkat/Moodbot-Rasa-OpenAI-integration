@@ -1,29 +1,48 @@
-# RASA-LLM Integration - Moodbot
-
+# Moodbot: Emotional Analysis and Upliftment Bot
+<sub><sup>*This readme was auto-generated using LLM prompts*</sup></sub>
 ## Introduction
+**Moodbot** is an integration utilizing the capabilities of RASA framework alongside the advanced AI processing of LLMs. This bot aims to understand a user's emotional state through their input statement and responds with an uplifting quote fetched online. The demonstration will showcase a newly initiated Rasa project augmented with OPENAI commands replacing the traditional NLU (Natural Language Understanding) and NLG (Natural Language Generation) components. 
 
+The key contribution of this project is the addition of a custom component to RASA's NLU pipeline, allowing users to input large paragraphs. The LLMs then extract relevant details without the need for extensive training data. Additionally, LLM calls are used for response generation, making OpenAI calls directly from the action server.
 
+Note: This functionality can be entirely developed using openai - assistants. However, this is just a demo of the integration capabilities.
 
-This project is a simple example demonstrating how to **enhance RASA's capabilities** by integrating **OpenAI's language models (LLMs)**. We extract relevant details from user-provided paragraphs, a task traditionally achieved using RASA slots and forms, which typically demands extensive training data.
+## Key contribution
 
-The **key contribution** of this project is the addition of a custom component to RASA's NLU pipeline, allowing users to input **large paragraphs**. The LLMs then extract relevant details without the need for extensive training data. Additionally, **LLM calls are used for response generation**, making OpenAI calls directly from the action server.
+## Pre-requisites
 
-**Why a Moodbot?**
+### Setting Up RASA Project
 
-The decision to use a `moodbot` for this example is driven by the fact that when users are asked about their feelings, they often prefer to respond with paragraphs rather than short sentences. This scenario serves as an excellent use case for leveraging **Language Models (LLMs)**.
+To interact with Moodbot, you need a default RASA setup. Follow these steps to get started:
 
+1. Install Rasa: `pip install rasa`
+2. Initiate a new Rasa project: `rasa init`
 
+### Acquiring OPENAI Key
 
-# Flow
+Ensure you have an OPENAI API key. Visit [OPENAI](https://openai.com/api/) to obtain your key if you don’t have one.
+
+## Logic
+
+- **NLU**: Any input other than a standard greeting (like Hi, Hello, etc.) will trigger the fallback path, rerouting the dialogue to OPENAI for understanding.
+- **Core**: The sequence of interaction will be determined by RASA's decision-making logic.
+- **NLG**: Output generation will
+  invoke OPENAI to provide responses, integrated as custom actions in RASA.
+
+## Flow Chart
 ![](https://github.com/vishwanathvenkat/moodbot/blob/master/moodbot-flow.png)
 
+## LLM Variables
 
-# How to setup
-1. Create a virtual environment and install requirements
-2. Obtain OpenAI API credentials and add to ~/.bashrc as `OPENAI_API_KEY`="" ""
-3. Repository Installation
-```git clone https://github.com/your-username/rasa-openai-integration.git```
+Customize your bot's behavior and interaction patterning through these:
 
+- **Model (LLM Id)**: Defines the AI model you're using.
+- **Temperature (0-2)**: Dictates response variability.
+- **Instruction**: Contextual commands given to OPENAI.
+
+## Architecture
+
+Moodbot leverages the `RASA server backend` paired with a `Streamlit` frontend for data input interaction. Real-time user entries trigger emotional analysis and subsequent response generation.
 
 ## Demo - Click on the image
 ### Happy path
@@ -35,15 +54,14 @@ The decision to use a `moodbot` for this example is driven by the fact that when
 ### Data missing Path
 [![](https://github.com/vishwanathvenkat/moodbot/blob/master/Thumbnail.png)](https://www.youtube.com/watch?v=9KFdWlyAk4U&ab_channel=VishwanathVenkat)
 
+
 ## Future Enhancements
 
-The current focus of this integration is on the seamless interaction between RASA and OpenAI.
+Key aspects pinpointed for improvement:
 
-Future enhancements may include:
-1. Utilizing vector databases to reduce the number of tokens required for LLM requests
-2. Improving the efficiency of information extraction by using better prompts
-3. Fine tuning the LLMs on data containing therapist conversations to get more empathetic responses
-4. Exploring additional features and capabilities offered by OpenAI's evolving language models
+1. **Integration of Vector Databases**: Aims at relieving the load on LLM requests concerning token counts.
+2. **Enhanced Information Extraction**: Prioritizes refining prompt constructions for deeper content understanding.
+3. **LM Fine-Tuning**: Emphasizes data probingly based on therapy dialogues to generate more resonant responses.
+4. **Exploration of OpenAI Language Models**: Skews towards harnessing evolving features and lactations set forth by OpenAI advancements.
 
-Contributions and feedback are welcome to make this integration even more robust and versatile.
-Feel free to open issues or submit pull requests to contribute to the project's evolution.
+Moodbot showcases the extraordinary interface of RASA with OPENAI, indicating major milestones ahead in emotionally intelligent chatbots.
